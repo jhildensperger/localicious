@@ -55,6 +55,15 @@
         "ONE": {
           "$ref": "#/definitions/Translation"
         },
+        "TWO": {
+          "$ref": "#/definitions/Translation"
+        },
+        "FEW": {
+          "$ref": "#/definitions/Translation"
+        },
+        "MANY": {
+          "$ref": "#/definitions/Translation"
+        },
         "OTHER": {
           "$ref": "#/definitions/Translation"
         }
