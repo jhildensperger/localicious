@@ -94,20 +94,101 @@ It may also contain empty lines to break up text into paragraphs.\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"This is a component with accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"This is the hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"This is the label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Pending Orders\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"The singular copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"The plural copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"The singular hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"The plural hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"The singular label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"The plural label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"No value for this component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"The singular value\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The plural value\\";
 ",
       "path": ".//ios/en/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Pending order</string>
+            <key>one</key>
+            <string>%1$d Pending order</string>
+            <key>other</key>
+            <string>%1$d Pending Orders</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular copy</string>
+            <key>other</key>
+            <string>The plural copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular hint</string>
+            <key>other</key>
+            <string>The plural hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular label</string>
+            <key>other</key>
+            <string>The plural label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>No value for this component</string>
+            <key>one</key>
+            <string>The singular value</string>
+            <key>other</key>
+            <string>The plural value</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/en/Localizable.stringsdict",
     },
     Object {
       "data": "{
@@ -191,23 +272,6 @@ public struct LocaliciousData: LocalizationProvider {
     public let accessibilityValueKey: String?
     public let translationKey: String?
     public let translationArgs: [CVarArg]?
-}
-
-public enum LocaliciousQuantity: String {
-    case zero = \\"ZERO\\"
-    case one = \\"ONE\\"
-    case other = \\"OTHER\\"
-
-    init(quantity: Int) {
-        switch true {
-        case quantity == 0:
-            self = .zero
-        case quantity == 1:
-            self = .one
-        default:
-            self = .other
-        }
-    }
 }
 
 public extension LocalizationProvider {
@@ -294,14 +358,13 @@ public struct L {
                 translationArgs: args
             )
             }
-            public static func SubTitle(quantity: Int, args: CVarArg...) -> LocaliciousData {
-                let quantityType = LocaliciousQuantity(quantity: quantity)
+            public static func SubTitle(args: CVarArg...) -> LocaliciousData {
                 return LocaliciousData(
-                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\",
+                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\\\(args)\\",
                 accessibilityHintKey: nil,
                 accessibilityLabelKey: nil,
                 accessibilityValueKey: nil,
-                translationKey: \\"Delivery.Widget.SubTitle.COPY.\\\\(quantityType.rawValue)\\",
+                translationKey: \\"Delivery.Widget.SubTitle.COPY\\",
                 translationArgs: args
             )
             }
@@ -334,15 +397,14 @@ public struct L {
             translationKey: \\"Accessible.RegularComponent.COPY\\",
             translationArgs: []
         )
-        public static func PluralComponent(quantity: Int) -> LocaliciousData {
-            let quantityType = LocaliciousQuantity(quantity: quantity)
+        public static func PluralComponent(args: CVarArg...) -> LocaliciousData {
             return LocaliciousData(
-            accessibilityIdentifier: \\"Accessible.PluralComponent\\",
-            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT.\\\\(quantityType.rawValue)\\",
-            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.\\\\(quantityType.rawValue)\\",
-            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.\\\\(quantityType.rawValue)\\",
-            translationKey: \\"Accessible.PluralComponent.COPY.\\\\(quantityType.rawValue)\\",
-            translationArgs: []
+            accessibilityIdentifier: \\"Accessible.PluralComponent\\\\(args)\\",
+            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT\\",
+            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL\\",
+            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE\\",
+            translationKey: \\"Accessible.PluralComponent.COPY\\",
+            translationArgs: args
         )
         }
     }
@@ -462,20 +524,101 @@ It may also contain empty lines to break up text into paragraphs.\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"This is a component with accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"This is the hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"This is the label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Pending Orders\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"The singular copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"The plural copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"The singular hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"The plural hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"The singular label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"The plural label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"No value for this component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"The singular value\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The plural value\\";
 ",
       "path": ".//ios/en/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Pending order</string>
+            <key>one</key>
+            <string>%1$d Pending order</string>
+            <key>other</key>
+            <string>%1$d Pending Orders</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular copy</string>
+            <key>other</key>
+            <string>The plural copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular hint</string>
+            <key>other</key>
+            <string>The plural hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular label</string>
+            <key>other</key>
+            <string>The plural label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>No value for this component</string>
+            <key>one</key>
+            <string>The singular value</string>
+            <key>other</key>
+            <string>The plural value</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/en/Localizable.stringsdict",
     },
     Object {
       "data": "// DO NOT EDIT. This file is auto-generated using Localicious (https://github.com/PicnicSupermarket/localicious).
@@ -497,23 +640,6 @@ public struct LocaliciousData: LocalizationProvider {
     public let accessibilityValueKey: String?
     public let translationKey: String?
     public let translationArgs: [CVarArg]?
-}
-
-public enum LocaliciousQuantity: String {
-    case zero = \\"ZERO\\"
-    case one = \\"ONE\\"
-    case other = \\"OTHER\\"
-
-    init(quantity: Int) {
-        switch true {
-        case quantity == 0:
-            self = .zero
-        case quantity == 1:
-            self = .one
-        default:
-            self = .other
-        }
-    }
 }
 
 public extension LocalizationProvider {
@@ -620,14 +746,13 @@ public struct L {
                 translationArgs: args
             )
             }
-            public static func SubTitle(quantity: Int, args: CVarArg...) -> LocaliciousData {
-                let quantityType = LocaliciousQuantity(quantity: quantity)
+            public static func SubTitle(args: CVarArg...) -> LocaliciousData {
                 return LocaliciousData(
-                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\",
+                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\\\(args)\\",
                 accessibilityHintKey: nil,
                 accessibilityLabelKey: nil,
                 accessibilityValueKey: nil,
-                translationKey: \\"Delivery.Widget.SubTitle.COPY.\\\\(quantityType.rawValue)\\",
+                translationKey: \\"Delivery.Widget.SubTitle.COPY\\",
                 translationArgs: args
             )
             }
@@ -660,15 +785,14 @@ public struct L {
             translationKey: \\"Accessible.RegularComponent.COPY\\",
             translationArgs: []
         )
-        public static func PluralComponent(quantity: Int) -> LocaliciousData {
-            let quantityType = LocaliciousQuantity(quantity: quantity)
+        public static func PluralComponent(args: CVarArg...) -> LocaliciousData {
             return LocaliciousData(
-            accessibilityIdentifier: \\"Accessible.PluralComponent\\",
-            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT.\\\\(quantityType.rawValue)\\",
-            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.\\\\(quantityType.rawValue)\\",
-            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.\\\\(quantityType.rawValue)\\",
-            translationKey: \\"Accessible.PluralComponent.COPY.\\\\(quantityType.rawValue)\\",
-            translationArgs: []
+            accessibilityIdentifier: \\"Accessible.PluralComponent\\\\(args)\\",
+            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT\\",
+            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL\\",
+            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE\\",
+            translationKey: \\"Accessible.PluralComponent.COPY\\",
+            translationArgs: args
         )
         }
     }
@@ -756,20 +880,101 @@ It may also contain empty lines to break up text into paragraphs.\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"This is a component with accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"This is the hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"This is the label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Pending Orders\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"The singular copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"The plural copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"The singular hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"The plural hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"The singular label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"The plural label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"No value for this component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"The singular value\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The plural value\\";
 ",
       "path": ".//ios/en/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Pending order</string>
+            <key>one</key>
+            <string>%1$d Pending order</string>
+            <key>other</key>
+            <string>%1$d Pending Orders</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular copy</string>
+            <key>other</key>
+            <string>The plural copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular hint</string>
+            <key>other</key>
+            <string>The plural hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular label</string>
+            <key>other</key>
+            <string>The plural label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>No value for this component</string>
+            <key>one</key>
+            <string>The singular value</string>
+            <key>other</key>
+            <string>The plural value</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/en/Localizable.stringsdict",
     },
     Object {
       "data": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -844,20 +1049,101 @@ De tekst kan zelfs witregels bevatten!\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"Dit is een component met accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"Dit is de hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"Dit is de label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Lopende bestelling\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Lopende bestelling\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Lopende bestellingen\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"De enkelvoudige copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"De meervoudige copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"De enkelvoudige hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"De meervoudige hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"De enkelvoudige label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"De meervoudige label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"Geen waarde voor dit component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"De enkelvoudige waarde\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The meervoudige waarde\\";
 ",
       "path": ".//ios/nl/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Lopende bestelling</string>
+            <key>one</key>
+            <string>%1$d Lopende bestelling</string>
+            <key>other</key>
+            <string>%1$d Lopende bestellingen</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige copy</string>
+            <key>other</key>
+            <string>De meervoudige copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige hint</string>
+            <key>other</key>
+            <string>De meervoudige hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige label</string>
+            <key>other</key>
+            <string>De meervoudige label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>Geen waarde voor dit component</string>
+            <key>one</key>
+            <string>De enkelvoudige waarde</string>
+            <key>other</key>
+            <string>The meervoudige waarde</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/nl/Localizable.stringsdict",
     },
     Object {
       "data": "// DO NOT EDIT. This file is auto-generated using Localicious (https://github.com/PicnicSupermarket/localicious).
@@ -928,23 +1214,6 @@ public struct LocaliciousData: LocalizationProvider {
     public let accessibilityValueKey: String?
     public let translationKey: String?
     public let translationArgs: [CVarArg]?
-}
-
-public enum LocaliciousQuantity: String {
-    case zero = \\"ZERO\\"
-    case one = \\"ONE\\"
-    case other = \\"OTHER\\"
-
-    init(quantity: Int) {
-        switch true {
-        case quantity == 0:
-            self = .zero
-        case quantity == 1:
-            self = .one
-        default:
-            self = .other
-        }
-    }
 }
 
 public extension LocalizationProvider {
@@ -1031,14 +1300,13 @@ public struct L {
                 translationArgs: args
             )
             }
-            public static func SubTitle(quantity: Int, args: CVarArg...) -> LocaliciousData {
-                let quantityType = LocaliciousQuantity(quantity: quantity)
+            public static func SubTitle(args: CVarArg...) -> LocaliciousData {
                 return LocaliciousData(
-                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\",
+                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\\\(args)\\",
                 accessibilityHintKey: nil,
                 accessibilityLabelKey: nil,
                 accessibilityValueKey: nil,
-                translationKey: \\"Delivery.Widget.SubTitle.COPY.\\\\(quantityType.rawValue)\\",
+                translationKey: \\"Delivery.Widget.SubTitle.COPY\\",
                 translationArgs: args
             )
             }
@@ -1071,15 +1339,14 @@ public struct L {
             translationKey: \\"Accessible.RegularComponent.COPY\\",
             translationArgs: []
         )
-        public static func PluralComponent(quantity: Int) -> LocaliciousData {
-            let quantityType = LocaliciousQuantity(quantity: quantity)
+        public static func PluralComponent(args: CVarArg...) -> LocaliciousData {
             return LocaliciousData(
-            accessibilityIdentifier: \\"Accessible.PluralComponent\\",
-            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT.\\\\(quantityType.rawValue)\\",
-            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.\\\\(quantityType.rawValue)\\",
-            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.\\\\(quantityType.rawValue)\\",
-            translationKey: \\"Accessible.PluralComponent.COPY.\\\\(quantityType.rawValue)\\",
-            translationArgs: []
+            accessibilityIdentifier: \\"Accessible.PluralComponent\\\\(args)\\",
+            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT\\",
+            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL\\",
+            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE\\",
+            translationKey: \\"Accessible.PluralComponent.COPY\\",
+            translationArgs: args
         )
         }
     }
@@ -1179,20 +1446,101 @@ It may also contain empty lines to break up text into paragraphs.\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"This is a component with accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"This is the hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"This is the label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Pending order\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Pending Orders\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"The singular copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"The plural copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"The singular hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"The plural hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"The singular label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"The plural label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"No value for this component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"The singular value\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The plural value\\";
 ",
       "path": ".//ios/en/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Pending order</string>
+            <key>one</key>
+            <string>%1$d Pending order</string>
+            <key>other</key>
+            <string>%1$d Pending Orders</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular copy</string>
+            <key>other</key>
+            <string>The plural copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular hint</string>
+            <key>other</key>
+            <string>The plural hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>The singular label</string>
+            <key>other</key>
+            <string>The plural label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>No value for this component</string>
+            <key>one</key>
+            <string>The singular value</string>
+            <key>other</key>
+            <string>The plural value</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/en/Localizable.stringsdict",
     },
     Object {
       "data": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
@@ -1279,20 +1627,101 @@ De tekst kan zelfs witregels bevatten!\\";
 \\"Accessible.RegularComponent.COPY\\" = \\"Dit is een component met accessiblity support\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.HINT\\" = \\"Dit is de hint\\";
 \\"Accessible.RegularComponent.ACCESSIBILITY.LABEL\\" = \\"Dit is de label\\";
-\\"Delivery.Widget.SubTitle.COPY.ZERO\\" = \\"%1$d Lopende bestelling\\";
-\\"Delivery.Widget.SubTitle.COPY.ONE\\" = \\"%1$d Lopende bestelling\\";
-\\"Delivery.Widget.SubTitle.COPY.OTHER\\" = \\"%1$d Lopende bestellingen\\";
-\\"Accessible.PluralComponent.COPY.ONE\\" = \\"De enkelvoudige copy\\";
-\\"Accessible.PluralComponent.COPY.OTHER\\" = \\"De meervoudige copy\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.ONE\\" = \\"De enkelvoudige hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.HINT.OTHER\\" = \\"De meervoudige hint\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.ONE\\" = \\"De enkelvoudige label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.OTHER\\" = \\"De meervoudige label\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ZERO\\" = \\"Geen waarde voor dit component\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.ONE\\" = \\"De enkelvoudige waarde\\";
-\\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.OTHER\\" = \\"The meervoudige waarde\\";
 ",
       "path": ".//ios/nl/Localizable.strings",
+    },
+    Object {
+      "data": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+    <key>Delivery.Widget.SubTitle.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d Lopende bestelling</string>
+            <key>one</key>
+            <string>%1$d Lopende bestelling</string>
+            <key>other</key>
+            <string>%1$d Lopende bestellingen</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.COPY</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige copy</string>
+            <key>other</key>
+            <string>De meervoudige copy</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.HINT</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige hint</string>
+            <key>other</key>
+            <string>De meervoudige hint</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.LABEL</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>De enkelvoudige label</string>
+            <key>other</key>
+            <string>De meervoudige label</string>
+        </dict>
+    </dict>
+    <key>Accessible.PluralComponent.ACCESSIBILITY.VALUE</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@var@</string>
+        <key>var</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>Geen waarde voor dit component</string>
+            <key>one</key>
+            <string>De enkelvoudige waarde</string>
+            <key>other</key>
+            <string>The meervoudige waarde</string>
+        </dict>
+    </dict>
+</dict>
+</plist>",
+      "path": ".//ios/nl/Localizable.stringsdict",
     },
     Object {
       "data": "// DO NOT EDIT. This file is auto-generated using Localicious (https://github.com/PicnicSupermarket/localicious).
@@ -1363,23 +1792,6 @@ public struct LocaliciousData: LocalizationProvider {
     public let accessibilityValueKey: String?
     public let translationKey: String?
     public let translationArgs: [CVarArg]?
-}
-
-public enum LocaliciousQuantity: String {
-    case zero = \\"ZERO\\"
-    case one = \\"ONE\\"
-    case other = \\"OTHER\\"
-
-    init(quantity: Int) {
-        switch true {
-        case quantity == 0:
-            self = .zero
-        case quantity == 1:
-            self = .one
-        default:
-            self = .other
-        }
-    }
 }
 
 public extension LocalizationProvider {
@@ -1510,14 +1922,13 @@ public struct L {
                 translationArgs: args
             )
             }
-            public static func SubTitle(quantity: Int, args: CVarArg...) -> LocaliciousData {
-                let quantityType = LocaliciousQuantity(quantity: quantity)
+            public static func SubTitle(args: CVarArg...) -> LocaliciousData {
                 return LocaliciousData(
-                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\",
+                accessibilityIdentifier: \\"Delivery.Widget.SubTitle\\\\(args)\\",
                 accessibilityHintKey: nil,
                 accessibilityLabelKey: nil,
                 accessibilityValueKey: nil,
-                translationKey: \\"Delivery.Widget.SubTitle.COPY.\\\\(quantityType.rawValue)\\",
+                translationKey: \\"Delivery.Widget.SubTitle.COPY\\",
                 translationArgs: args
             )
             }
@@ -1550,15 +1961,14 @@ public struct L {
             translationKey: \\"Accessible.RegularComponent.COPY\\",
             translationArgs: []
         )
-        public static func PluralComponent(quantity: Int) -> LocaliciousData {
-            let quantityType = LocaliciousQuantity(quantity: quantity)
+        public static func PluralComponent(args: CVarArg...) -> LocaliciousData {
             return LocaliciousData(
-            accessibilityIdentifier: \\"Accessible.PluralComponent\\",
-            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT.\\\\(quantityType.rawValue)\\",
-            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL.\\\\(quantityType.rawValue)\\",
-            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE.\\\\(quantityType.rawValue)\\",
-            translationKey: \\"Accessible.PluralComponent.COPY.\\\\(quantityType.rawValue)\\",
-            translationArgs: []
+            accessibilityIdentifier: \\"Accessible.PluralComponent\\\\(args)\\",
+            accessibilityHintKey: \\"Accessible.PluralComponent.ACCESSIBILITY.HINT\\",
+            accessibilityLabelKey: \\"Accessible.PluralComponent.ACCESSIBILITY.LABEL\\",
+            accessibilityValueKey: \\"Accessible.PluralComponent.ACCESSIBILITY.VALUE\\",
+            translationKey: \\"Accessible.PluralComponent.COPY\\",
+            translationArgs: args
         )
         }
     }

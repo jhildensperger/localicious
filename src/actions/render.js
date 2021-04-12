@@ -17,7 +17,7 @@ const render = (data, outputPath, languages, outputTypes, collections) => {
     const renderResults = outputTypes.map(outputType => {
       const view = createLocalizationView(translationsForLanguage, outputType);
       return renderLocalizationView(view, outputType, language, outputPath);
-    });
+    }).flat();
     return [...acc, ...renderResults];
   }, []);
 
@@ -39,11 +39,26 @@ const render = (data, outputPath, languages, outputTypes, collections) => {
 
 const renderLocalizationView = (view, outputType, language, basePath) => {
   const outputPath = localizationOutputPath(basePath, outputType, language);
+  const pluralOutputPath = pluralLocalizationOutputPath(basePath, outputType, language);
+
   Handlebars.registerHelper("lowerCase", string => string.toLowerCase());
-  return localizationTemplate(outputType)
+
+  let rendering = localizationTemplate(outputType)
     .map(source => Handlebars.compile(source))
     .map(template => template(view))
     .map(render => ({ path: outputPath, data: render }));
+
+  if (pluralOutputPath) {
+    /// iOS needs a separate file for rendering plurals
+    let pluralRendering = pluralLocalizationTemplate(outputType)
+      .map(source => Handlebars.compile(source))
+      .map(template => template(view))
+      .map(render => ({ path: pluralOutputPath, data: render }));
+
+    return [rendering, pluralRendering]  
+  }
+
+  return rendering
 };
 
 const renderCodeGenView = (view, outputType, basePath) => {
@@ -74,6 +89,12 @@ const localizationTemplate = type => {
   }
 };
 
+const pluralLocalizationTemplate = type => {
+  if (outputTypes.IOS == type) {
+    return loadFile(path.resolve(__dirname, "../../templates/localizable_stringsdict_file.hbs"));
+  }
+};
+
 const codeGenerationTemplate = type => {
   switch (type) {
     case outputTypes.ANDROID:
@@ -97,9 +118,21 @@ const localizationOutputPath = (basePath, outputType, language) => {
   return `${basePath}/${outputType.toLowerCase()}/${language}/${localizationFileName(outputType)}`;
 };
 
+const pluralLocalizationOutputPath = (basePath, outputType, language) => {
+  if (outputTypes.IOS == outputType) {
+    return `${basePath}/${outputType.toLowerCase()}/${language}/${pluralLocalizationFileName(outputType)}`;
+  }
+};
+
 const codeGenerationOutputPath = (basePath, outputType) => {
   return `${basePath}/${outputType.toLowerCase()}/${codeGenerationFileName(outputType)}`;
 };
+
+const pluralLocalizationFileName = type => {
+  if (outputTypes.IOS == type) {
+    return "Localizable.stringsdict";
+  }
+}
 
 const localizationFileName = type => {
   switch (type) {
@@ -209,7 +242,7 @@ const createCodeGenView = (translations, outputType, languages) => {
           containsQuantity,
           containsFormatting,
           containsQuantityAndFormatting: containsFormatting && containsQuantity,
-          requiresFunction: containsFormatting || containsQuantity,
+          containsQuantityOrFormatting: containsFormatting || containsQuantity,
           identifier: item.keyPath.join(delimiter),
           ...{ [copyKey]: (item[copyKey] && createCopyView(item, delimiter)) || {} },
           ...{ [accKey]: (item[accKey] && createAccessibilityViews(item, delimiter)) || {} }

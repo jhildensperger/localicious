@@ -19,23 +19,6 @@ public struct LocaliciousData: LocalizationProvider {
     public let translationArgs: [CVarArg]?
 }
 
-public enum LocaliciousQuantity: String {
-    case zero = "ZERO"
-    case one = "ONE"
-    case other = "OTHER"
-
-    init(quantity: Int) {
-        switch true {
-        case quantity == 0:
-            self = .zero
-        case quantity == 1:
-            self = .one
-        default:
-            self = .other
-        }
-    }
-}
-
 public extension LocalizationProvider {
     var translation: String? {
         return translationKey.map { translation(forKey: $0) } ?? nil
